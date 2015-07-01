@@ -114,6 +114,10 @@ public class Bot {
 	return base64String;
     }
 
+    public String send(final String text){
+	return text;
+    }
+
     
     public Robot getRobotInstance(){
 	return robot;
