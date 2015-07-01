@@ -27,15 +27,6 @@ public class MainAppTest extends TestCase {
     }
 
     public void testParseSimple() {
-	ArrayList<Object> ret = MainApp.parse("foo(1,2,3)");
-	assertEquals(ret.get(0), "foo");
-	assertTrue(Arrays.equals((String[])ret.get(1), new String[]{"1","2","3"}));
     }
-
-    // public void testParseComplex() {
-    // 	ArrayList<Object> ret = MainApp.parse("foo(1,2,3);boo(2,3)");
-    // 	assertEquals(ret.get(0), "foo");
-    // 	assertTrue(Arrays.equals((String[])ret.get(1), new String[]{"1","2","3"}));
-    // }
     
 }
