@@ -1,22 +1,11 @@
 package co.socibo;
 
 import co.socibo.bot.Bot;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.Character;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,7 +14,6 @@ import javax.script.ScriptEngineManager;
  */
 public class MainApp {
 
-    private static final Pattern parsePattern = Pattern.compile("(.*)\\((.*)\\)");
     /**
      * A main() so we can easily run these routing rules in our IDE
      */
