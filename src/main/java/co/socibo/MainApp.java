@@ -88,13 +88,14 @@ public class MainApp {
 		    }
 		}
 
-		
-		if(sb.equals("]]^")){
-		    connectionSocket.close();
-		    break; // end session		    
-		}
+		final String command = sb.substring(0);
 		try {
-		    Object result = engine.eval(sb.substring(0));
+		    if(comman.equals("BYE")){ // end with bye // move that into bot
+			connectionSocket.close();
+			break;
+		    }
+		    
+		    Object result = engine.eval(command);
 		    if(result != null){
 			outToClient.writeChars(result.toString() + "\n");		    
 		    } else {
