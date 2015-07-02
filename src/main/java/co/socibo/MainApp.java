@@ -1,6 +1,7 @@
 package co.socibo;
 
 import co.socibo.bot.Bot;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 /**
  * A Camel Application
@@ -26,6 +28,28 @@ public class MainApp {
 	final AtomicBoolean shutdownCalled = new AtomicBoolean(false);
 
 	final ScriptEngineManager manager = new ScriptEngineManager();
+
+	//List<ScriptEngineFactory> factories = manager.getEngineFactories();
+
+	// for (ScriptEngineFactory factory : factories) {
+
+	//     System.out.println("ScriptEngineFactory Info");
+
+	//     String engName = factory.getEngineName();
+	//     String engVersion = factory.getEngineVersion();
+	//     String langName = factory.getLanguageName();
+	//     String langVersion = factory.getLanguageVersion();
+
+	//     System.out.printf("\tScript Engine: %s (%s)%n", engName, engVersion);
+
+	//     List<String> engNames = factory.getNames();
+	//     for(String name : engNames) {
+	// 	System.out.printf("\tEngine Alias: %s%n", name);
+	//     }
+
+	//     System.out.printf("\tLanguage: %s (%s)%n", langName, langVersion);
+	// }
+	
 	final ScriptEngine engine = manager.getEngineByName("JavaScript");
 
 	engine.put("bot", bot);
@@ -37,7 +61,6 @@ public class MainApp {
 	ServerSocket serverSock = new ServerSocket();
 	InetAddress addr = InetAddress.getByName("0.0.0.0");
 	serverSock.bind(new InetSocketAddress(addr, 6789));
-
 	while(!shutdownCalled.get()){
 	
 	    final Socket connectionSocket = serverSock.accept();
@@ -46,13 +69,32 @@ public class MainApp {
 	    
 		BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 		DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-		line = inFromClient.readLine();
-		if(line == null)
-		    break; // end session
 
-	    
+		StringBuffer sb = new StringBuffer(4096);// FIXME: see how large scripts are basically
+
+
+		boolean lastLineWasEmpty = false;
+		while(!shutdownCalled.get()){
+		    line = inFromClient.readLine();
+		    if(line.isEmpty()){
+			if(lastLineWasEmpty){
+			    break; // end transfer
+			}
+			
+			lastLineWasEmpty = true;
+		    } else {
+			lastLineWasEmpty = false;
+			sb.append(line);
+		    }
+		}
+
+		
+		if(sb.equals("]]^")){
+		    connectionSocket.close();
+		    break; // end session		    
+		}
 		try {
-		    Object result = engine.eval(line);
+		    Object result = engine.eval(sb.substring(0));
 		    if(result != null){
 			outToClient.writeChars(result.toString() + "\n");		    
 		    } else {
@@ -63,8 +105,8 @@ public class MainApp {
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
-	    }
 	}
+    }
     }
 }
 
