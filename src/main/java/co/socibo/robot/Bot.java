@@ -50,7 +50,7 @@ public class Bot {
 	robot.mouseMove(x, y);
     }
 
-    public void key(final int [] keys)
+    public void keys(final int [] keys)
 	throws AWTException, InterruptedException {
 	System.out.println("key called");
 	    
