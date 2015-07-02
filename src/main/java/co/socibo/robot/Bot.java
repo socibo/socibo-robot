@@ -18,7 +18,6 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Base64;
 import javax.imageio.ImageIO;
 
 
