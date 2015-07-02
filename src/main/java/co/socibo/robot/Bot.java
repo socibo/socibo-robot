@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -43,6 +44,11 @@ public class Bot {
 	}
     }
 
+    public void click()
+	throws AWTException, InterruptedException{
+	click(1, InputEvent.BUTTON1_MASK);
+    }
+    
     public void move(int x, int y)
 	throws AWTException, InterruptedException{
 	System.out.println("move called");
@@ -57,6 +63,7 @@ public class Bot {
 	    robot.keyPress(keys[i]);
 	    robot.delay(50);
 	};
+	
 	robot.delay(50);
 	for(int i=0;i<keys.length;i++){
 	    robot.keyRelease(keys[i]);
@@ -64,6 +71,11 @@ public class Bot {
 	}
     }
 
+    public void ret()
+	throws AWTException, InterruptedException {
+	keys(new int[]{ KeyEvent.VK_ENTER });
+    }
+    
     public void enter(final String string)
 	throws AWTException, InterruptedException {
 	System.out.println("enter called");
@@ -113,6 +125,12 @@ public class Bot {
 	return base64String;
     }
 
+    public String showClipboard() throws UnsupportedFlavorException, IOException{
+	String data = (String) Toolkit.getDefaultToolkit()
+	    .getSystemClipboard().getData(DataFlavor.stringFlavor);
+	return data;
+    }
+    
     public String send(final String text){
 	return text;
     }
